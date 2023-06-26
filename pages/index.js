@@ -5,6 +5,7 @@ import { MongoClient } from 'mongodb';
 import MeetupList from '../components/meetups/MeetupList';
 
 function HomePage(props) {
+
   return (
     <Fragment>
       <Head>
