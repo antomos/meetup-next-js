@@ -1,22 +1,49 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import Head from 'next/head';
-
+import MeetupForm from '../../components/meetups/MeetupForm';
 import MeetupDetail from '../../components/meetups/MeetupDetail';
+import { useRouter } from 'next/router';
 
 function MeetupDetails(props) {
+  const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  function editHandler(){
+    setIsEditing(true)
+  }
+  async function updateMeetupHandler(enteredMeetupData) {
+    const response = await fetch(`/api/meetups/${props.meetupData.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(enteredMeetupData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+
+
+    router.push('/');
+  }
+
   return (
     <Fragment>
       <Head>
         <title>{props.meetupData.title}</title>
         <meta name='description' content={props.meetupData.description} />
       </Head>
-      <MeetupDetail
-        image={props.meetupData.image}
-        title={props.meetupData.title}
-        address={props.meetupData.address}
-        description={props.meetupData.description}
-      />
+      {isEditing ?
+        <MeetupForm initialData={props.meetupData} onSendingMeetup={updateMeetupHandler} action='Edit'/> :
+        <MeetupDetail
+          image={props.meetupData.image}
+          title={props.meetupData.title}
+          address={props.meetupData.address}
+          description={props.meetupData.description}
+          editHandler={editHandler}
+        />
+      }
+
     </Fragment>
   );
 }

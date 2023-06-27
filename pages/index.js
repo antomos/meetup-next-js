@@ -15,7 +15,8 @@ function HomePage(props) {
           content='Browse a huge list of highly active React meetups!'
         />
       </Head>
-      <MeetupList meetups={props.meetups} />
+      {props.meetups ? <MeetupList meetups={props.meetups}/>: <h1>No Meetups</h1>}
+
     </Fragment>
   );
 }
@@ -48,12 +49,12 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      meetups: meetups.map((meetup) => ({
+      meetups:meetups.length > 0 ? meetups.map((meetup) => ({
         title: meetup.title,
         address: meetup.address,
         image: meetup.image,
         id: meetup._id.toString(),
-      })),
+      })) : null,
     }
   };
 }

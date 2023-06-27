@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 async function handler(req, res) {
 
   if (req.method === 'DELETE') {
-    console.log('DELETE');
+
     const client = await MongoClient.connect(
       'mongodb+srv://amoschetti:test@cluster0.axoxoiw.mongodb.net/meetups?retryWrites=true&w=majority'
     );
@@ -37,13 +37,33 @@ async function handler(req, res) {
 
     const result = await meetupsCollection.deleteOne({ _id: ObjectId(meetupId) });
 
-    console.log(req.query);
+
 
     client.close();
 
     res.status(200).json({ message: `${meetupId}Meetup deleted!` });
 
 
+  }
+  if (req.method === 'PATCH') {
+    const { enteredMeetupData } = req.body;
+    const client = await MongoClient.connect(
+      'mongodb+srv://amoschetti:test@cluster0.axoxoiw.mongodb.net/meetups?retryWrites=true&w=majority'
+    );
+    const db = client.db();
+
+    const meetupsCollection = db.collection('meetups');
+
+    const { meetupId } = req.query;
+
+
+    await meetupsCollection.updateOne(
+      { _id: ObjectId(meetupId) },
+      { $set: req.body }
+    );
+    client.close();
+
+    res.status(200).json({ message: 'Meetup updated successfully.' });
   }
 }
 
