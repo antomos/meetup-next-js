@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import NewMeetupForm from '../../components/meetups/NewMeetupForm';
+import MeetupForm from '../../components/meetups/MeetupForm';
 
 function NewMeetupPage() {
   const router = useRouter();
@@ -19,10 +19,16 @@ function NewMeetupPage() {
 
     const data = await response.json();
 
-    console.log(data);
+
 
     router.push('/');
   }
+  const initialData = {
+    title: '',
+    image: '',
+    address: '',
+    description: ''
+  };
 
   return (
     <Fragment>
@@ -33,7 +39,7 @@ function NewMeetupPage() {
           content='Add your own meetups and create amazing networking opportunities.'
         />
       </Head>
-      <NewMeetupForm onAddMeetup={addMeetupHandler} />
+      <MeetupForm initialData={initialData} onSendingMeetup={addMeetupHandler} action='Add'/>
     </Fragment>
   );
 }

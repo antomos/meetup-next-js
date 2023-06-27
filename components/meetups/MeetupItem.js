@@ -4,7 +4,7 @@ import Card from '../ui/Card';
 import classes from './MeetupItem.module.css';
 
 function MeetupItem({ meetup, onDelete }) {
-  console.log(meetup);
+
   const router = useRouter();
   const handleDelete = () => {
     onDelete(meetup);
